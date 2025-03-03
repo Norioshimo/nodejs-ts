@@ -28,7 +28,7 @@ export const postUsuario = async (req: Request, res: Response) => {
     await usuario.update(body);
 
     res.json(usuario);
-  } catch (error) { 
+  } catch (error) {
     res.status(500).json({
       msg: "Hable con el administrador",
     });

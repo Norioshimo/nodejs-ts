@@ -23,6 +23,7 @@ class Server {
 
   async dbConnection() {
     try {
+      console.log('URL_DB: '+process.env.URL_DB);
       await db.authenticate();
       console.log("Conectado a la base de datos.");
     } catch (error) {

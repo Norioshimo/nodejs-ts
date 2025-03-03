@@ -1,12 +1,38 @@
 services:
+  nodejs-ts:
+    build:
+      context: .
+    container_name: nodejs_ts
+    image: nodejs_ts
+    volumes:
+      - .:/usr/src/app
+      - /usr/src/app/node_modules
+    ports:
+      - "${PORT}:${PORT}"
+    environment:
+      - CHOKIDAR_USEPOLLING=true
+      - CHOKIDAR_INTERVAL=100
+    command: npm run start-watch  
+    restart: always  
+    depends_on:
+      - db
+    networks:
+      - node_ts_network
+
   db:
-    container_name: prueba_node
+    container_name: nodejs_ts_db
     image: mysql:8.0
     environment:
-      MYSQL_ROOT_PASSWORD: "123" 
-      MYSQL_DATABASE: db_prueba_node
+      MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
+      MYSQL_DATABASE: ${DB_DATABASE}
     restart: always
     ports:
-      - "3307:3306"
+      - "3306:${DB_PORT}"
     volumes:
       - ./mysql_data:/var/lib/mysql
+    networks:
+      - node_ts_network
+
+networks:
+  node_ts_network:
+    driver: bridge
